@@ -1,0 +1,13 @@
+---
+- name: "install mod_security"
+  apt:
+    pkg: "{{ item }}"
+    state: present
+  with_items:
+  - libapache2-mod-security2
+  - modsecurity-crs
+
+- name: "Install default config"
+  copy:
+    src: modsecurity.conf
+    dest: /etc/modsecurity/modsecurity.conf
