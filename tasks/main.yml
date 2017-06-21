@@ -11,3 +11,4 @@
   copy:
     src: modsecurity.conf
     dest: /etc/modsecurity/modsecurity.conf
+  notify: restart apache
