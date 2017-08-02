@@ -7,8 +7,36 @@
   - libapache2-mod-security2
   - modsecurity-crs
 
-- name: "Install default config"
+- name: "Install mod_security config"
   copy:
     src: modsecurity.conf
     dest: /etc/modsecurity/modsecurity.conf
   notify: restart apache
+
+- name: Postfix main_mailer_type config
+  debconf:
+    name: postfix
+    question: postfix/main_mailer_type
+    value: Local only
+    vtype: select
+
+- name: Postfix mailname config
+  debconf:
+    name: postfix
+    question: postfix/mailname
+    value: "{{ ansible_fqdn }}"
+    vtype: string
+
+- name: "install mod_evasive"
+  apt:
+    pkg: "{{ item }}"
+    state: present
+  with_items:
+  - libapache2-mod-evasive
+
+- name: "Install mod_evasive config"
+  copy:
+    src: evasive.conf
+    dest: /etc/apache2/mods-available/evasive.conf
+  notify: restart apache
+
